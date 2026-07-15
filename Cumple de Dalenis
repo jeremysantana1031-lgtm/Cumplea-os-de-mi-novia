@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños, Dalenis!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Para que las estrellas no creen barra de desplazamiento */
+        }
+
+        /* Pantalla de inicio */
+        #pantalla-inicio {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .boton-abrir {
+            background-color: #d81b60;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(216, 27, 96, 0.4);
+            transition: transform 0.3s, background-color 0.3s;
+            animation: latido 1.5s infinite;
+        }
+
+        .boton-abrir:hover {
+            background-color: #e91e63;
+            transform: scale(1.1);
+        }
+
+        /* Tarjeta principal oculta al inicio */
+        #contenedor-tarjeta {
+            display: none;
+            position: relative;
+            z-index: 10;
+        }
+
+        .tarjeta-cumpleanos {
+            background-color: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 450px;
+            margin: 20px;
+            /* Nueva animación de entrada */
+            animation: aparecer 1s ease-out;
+        }
+
+        h1 {
+            color: #d81b60;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            /* Nueva animación de deslizamiento */
+            animation: deslizarAbajo 1.2s ease-out;
+        }
+
+        p {
+            color: #444;
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            opacity: 0;
+            /* Nueva animación de desvanecimiento */
+            animation: aparecerTexto 2s ease-out forwards;
+            animation-delay: 1s; 
+        }
+
+        .corazon {
+            color: #e91e63;
+            font-size: 4em;
+            margin: 20px 0;
+            display: inline-block;
+            animation: latido 1.2s infinite;
+        }
+
+        .firma {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #d81b60;
+            font-size: 1.3em;
+            opacity: 0;
+            animation: aparecerTexto 2s ease-out forwards;
+            animation-delay: 2s;
+        }
+
+        /* --- Definición de Animaciones --- */
+        @keyframes latido {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.2); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes aparecer {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes deslizarAbajo {
+            0% { transform: translateY(-40px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes aparecerTexto {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Estrellas flotantes de fondo */
+        .burbuja {
+            position: absolute;
+            bottom: -50px;
+            font-size: 1.5em;
+            animation: flotar 6s infinite ease-in-out;
+            opacity: 0.6;
+        }
+
+        @keyframes flotar {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Aquí definimos la música (se repite en bucle) -->
+    <audio id="musica-fondo" loop>
+        <source src="cancion.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Pantalla de inicio -->
+    <div id="pantalla-inicio">
+        <button class="boton-abrir" onclick="abrirSorpresa()">🎁 Toca aquí para tu sorpresa 🎁</button>
+    </div>
+
+    <!-- Contenedor principal de la tarjeta -->
+    <div id="contenedor-tarjeta">
+        <div class="tarjeta-cumpleanos">
+            <h1>¡Feliz Cumpleaños, Dalenis! 🎂</h1>
+            <div class="corazon">❤️</div>
+            <p>Que este día sea tan increíble y especial como tú. Quería prepararte una sorpresa diferente y dejarte este mensaje en internet para que lo puedas ver siempre. ¡Espero que disfrutes muchísimo tu día!</p>
+            <div class="firma">Con todo mi amor,<br>Jeremy</div>
+        </div>
+    </div>
+
+    <!-- Script para el botón y las animaciones de fondo -->
+    <script>
+        function abrirSorpresa() {
+            // Ocultar botón, mostrar tarjeta y reproducir música
+            document.getElementById('pantalla-inicio').style.display = 'none';
+            document.getElementById('contenedor-tarjeta').style.display = 'block';
+            document.getElementById('musica-fondo').play();
+
+            // Generar estrellas flotantes
+            for (let i = 0; i < 20; i++) {
+                crearEstrella();
+            }
+        }
+
+        function crearEstrella() {
+            const estrella = document.createElement('div');
+            estrella.classList.add('burbuja');
+            estrella.innerHTML = '✨'; // Puedes cambiarlo por '❤️' o '🎈'
+            
+            // Posición y tiempos aleatorios para que se vea natural
+            estrella.style.left = Math.random() * 100 + 'vw';
+            estrella.style.animationDuration = (Math.random() * 4 + 4) + 's'; 
+            estrella.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.body.appendChild(estrella);
+        }
+    </script>
+</body>
+</html> 
