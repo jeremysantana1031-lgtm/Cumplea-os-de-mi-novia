@@ -14,7 +14,7 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* Para que las estrellas no creen barra de desplazamiento */
+            overflow: hidden; 
         }
 
         /* Pantalla de inicio */
@@ -48,56 +48,83 @@
             display: none;
             position: relative;
             z-index: 10;
+            perspective: 1000px; /* Para efecto 3D opcional */
         }
 
         .tarjeta-cumpleanos {
             background-color: white;
-            padding: 50px 40px;
+            padding: 40px 30px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
             text-align: center;
             max-width: 450px;
             margin: 20px;
-            /* Nueva animación de entrada */
             animation: aparecer 1s ease-out;
+            max-height: 90vh; /* Para que no se corte en pantallas pequeñas */
+            overflow-y: auto; /* Scroll interno si es necesario */
         }
 
         h1 {
             color: #d81b60;
             margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 2.2em;
-            /* Nueva animación de deslizamiento */
+            margin-bottom: 15px;
+            font-size: 2em;
             animation: deslizarAbajo 1.2s ease-out;
+        }
+
+        /* --- NUEVOS ESTILOS PARA LA GALERÍA DE FOTOS --- */
+        .galeria-fotos {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap; /* Para que se ajusten en celular */
+            opacity: 0;
+            animation: aparecerTexto 2s ease-out forwards;
+            animation-delay: 0.5s; /* Aparecen un poco después que la tarjeta */
+        }
+
+        .foto-cumple {
+            width: 100px;
+            height: 100px;
+            object-fit: cover; /* Recorta la foto para que sea cuadrada perfecta */
+            border-radius: 50%; /* Hace las fotos circulares */
+            border: 4px solid #fecfef; /* Borde rosa suave */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .foto-cumple:hover {
+            transform: scale(1.1) rotate(5deg);
+            border-color: #d81b60; /* El borde resalta al pasar el mouse */
         }
 
         p {
             color: #444;
-            font-size: 1.2em;
+            font-size: 1.1em;
             line-height: 1.6;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             opacity: 0;
-            /* Nueva animación de desvanecimiento */
             animation: aparecerTexto 2s ease-out forwards;
-            animation-delay: 1s; 
+            animation-delay: 1.5s; 
         }
 
         .corazon {
             color: #e91e63;
-            font-size: 4em;
-            margin: 20px 0;
+            font-size: 3.5em;
+            margin: 10px 0;
             display: inline-block;
             animation: latido 1.2s infinite;
         }
 
         .firma {
-            margin-top: 20px;
+            margin-top: 15px;
             font-weight: bold;
             color: #d81b60;
-            font-size: 1.3em;
+            font-size: 1.2em;
             opacity: 0;
             animation: aparecerTexto 2s ease-out forwards;
-            animation-delay: 2s;
+            animation-delay: 2.5s;
         }
 
         /* --- Definición de Animaciones --- */
@@ -131,6 +158,7 @@
             font-size: 1.5em;
             animation: flotar 6s infinite ease-in-out;
             opacity: 0.6;
+            z-index: 1;
         }
 
         @keyframes flotar {
@@ -148,15 +176,29 @@
 
     <!-- Pantalla de inicio -->
     <div id="pantalla-inicio">
-        <button class="boton-abrir" onclick="abrirSorpresa()">🎁 Toca aquí para tu sorpresa 🎁</button>
+        <button class="boton-abrir" onclick="abrirSorpresa()">🎁 Toca aquí, Dalenis 🎁</button>
     </div>
 
     <!-- Contenedor principal de la tarjeta -->
     <div id="contenedor-tarjeta">
         <div class="tarjeta-cumpleanos">
             <h1>¡Feliz Cumpleaños, Dalenis! 🎂</h1>
+            
             <div class="corazon">❤️</div>
+
+            <!-- --- NUEVA SECCIÓN DE GALERÍA DE FOTOS --- -->
+            <div class="galeria-fotos">
+                <!-- Asegúrate de haber subido foto1.jpg, foto2.jpg, etc. -->
+                <img src="foto1.jpg" alt="Foto Dalenis 1" class="foto-cumple">
+                <img src="foto2.jpg" alt="Foto Dalenis 2" class="foto-cumple">
+                <img src="foto3.jpg" alt="Foto Dalenis 3" class="foto-cumple">
+                <!-- Puedes agregar una cuarta foto aquí si quieres -->
+                <!-- <img src="foto4.jpg" alt="Foto Dalenis 4" class="foto-cumple"> -->
+            </div>
+
+            <!-- Tu mensaje personalizado -->
             <p>Que este día sea tan increíble y especial como tú. Quería prepararte una sorpresa diferente y dejarte esto en internet para que lo puedas ver siempre. Quiero darte las gracias por ser la mujer que eres y por esa fuerza que tienes para tratar de salir adelante cada día. Gracias por llegar a mi vida. ¡Espero que disfrutes muchísimo tu día!</p>
+            
             <div class="firma">Con todo mi amor,<br>Jeremy</div>
         </div>
     </div>
@@ -167,26 +209,37 @@
             // Ocultar botón, mostrar tarjeta y reproducir música
             document.getElementById('pantalla-inicio').style.display = 'none';
             document.getElementById('contenedor-tarjeta').style.display = 'block';
-            document.getElementById('musica-fondo').play();
+            
+            // Intenta reproducir la música (manejando posibles bloqueos del navegador)
+            var musica = document.getElementById('musica-fondo');
+            musica.play().catch(function(error) {
+                console.log("La reproducción automática fue bloqueada por el navegador.");
+            });
 
             // Generar estrellas flotantes
             for (let i = 0; i < 20; i++) {
-                crearEstrella();
+                setTimeout(crearEstrella, i * 150); // Aparecen poco a poco
             }
         }
 
         function crearEstrella() {
             const estrella = document.createElement('div');
             estrella.classList.add('burbuja');
-            estrella.innerHTML = '✨'; // Puedes cambiarlo por '❤️' o '🎈'
+            
+            // Alternar entre estrellas y corazones flotantes
+            estrella.innerHTML = Math.random() > 0.5 ? '✨' : '❤️';
             
             // Posición y tiempos aleatorios para que se vea natural
             estrella.style.left = Math.random() * 100 + 'vw';
-            estrella.style.animationDuration = (Math.random() * 4 + 4) + 's'; 
-            estrella.style.animationDelay = Math.random() * 2 + 's';
+            estrella.style.animationDuration = (Math.random() * 3 + 4) + 's'; 
             
             document.body.appendChild(estrella);
+            
+            // Borrar la estrella después de que termine la animación para no saturar la PC
+            setTimeout(() => {
+                estrella.remove();
+            }, 7000);
         }
     </script>
 </body>
-</html> 
+</html>
